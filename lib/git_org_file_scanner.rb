@@ -1,7 +1,8 @@
-require "git_org_file_scanner/version"
-require "octokit"
+require 'git_org_file_scanner/version'
+require 'octokit'
 
 module GitOrgFileScanner
+  # Scans all repos in a Github org for a specified file
   class Scanner
     attr_accessor :org
 
@@ -11,28 +12,26 @@ module GitOrgFileScanner
     end
 
     def contain_file(file)
-      repos_with_file = []
+      repos = []
+
       org_repositories.each do |repo|
-        contains_file?(repo[:full_name], file) ? repos_with_file << repo : next 
-        begin
-          @octokit_client.contents(repo[:full_name], path: file)
-          repos_with_file << repo[:full_name]
-        rescue
-          next
-        end
+        repos << repo[:full_name] if contains_file?(repo[:full_name], file)
+        next
       end
 
-      repos_with_file
+      repos
     end
 
     def missing_file(file)
-      repos_without_file = []
+      repos = []
 
       org_repositories.each do |repo|
-        contains_file?(repo[:full_name], file) ? next : repos_without_file << repo[:full_name]
+        next if contains_file?(repo[:full_name], file)
+
+        repos << repo[:full_name]
       end
 
-      repos_without_file
+      repos
     end
 
     private
@@ -42,12 +41,10 @@ module GitOrgFileScanner
     end
 
     def contains_file?(repo_name, file)
-      begin
-        @octokit_client.contents(repo_name, path: file)
-        true
-      rescue
-        false
-      end
+      @octokit_client.contents(repo_name, path: file)
+      true
+    rescue Octokit::NotFound
+      false
     end
   end
 end
