@@ -14,6 +14,7 @@ module GitOrgFileScanner
       repos_with_file = []
 
       org_repositories.each do |repo|
+        contains_file?(repo[:full_name], file) ? repos_with_file << repo : next 
         begin
           @octokit_client.contents(repo[:full_name], path: file)
           repos_with_file << repo[:full_name]
@@ -29,20 +30,25 @@ module GitOrgFileScanner
       repos_without_file = []
 
       org_repositories.each do |repo|
-        begin
-          @octokit_client.contents(repo[:full_name], path: file)
-          next
-        rescue
-          repos_without_file << repo[:full_name]
-        end
+        contains_file?(repo[:full_name], file) ? next : repos_without_file << repo[:full_name]
       end
 
       repos_without_file
- 
     end
 
     def org_repositories
       @octokit_client.org_repositories(org)
+    end
+
+    private
+
+    def contains_file?(repo_name, file)
+      begin
+        @octokit_client.contents(repo_name, path: file)
+        true
+      rescue
+        false
+      end
     end
   end
 end
