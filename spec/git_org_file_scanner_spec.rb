@@ -13,22 +13,6 @@ RSpec.describe GitOrgFileScanner do
     end
   end
 
-  context 'getting org repos' do
-    let(:org) { 'my-org' }
-    let(:scanner) { GitOrgFileScanner::Scanner.new(org)}
-    let(:github_client) { Octokit::Client.new }
-    
-    before do
-      allow(Octokit::Client).to receive(:new).and_return(github_client)
-    end
-
-    it 'gets a list of repos in the org' do
-      expect(github_client).to receive(:org_repositories).with(org)
-
-      scanner.org_repositories
-    end
-  end
-
   context 'scanning org repos for a file' do
     let(:org) { 'my-org' }
     let(:org_repos_response) do 
