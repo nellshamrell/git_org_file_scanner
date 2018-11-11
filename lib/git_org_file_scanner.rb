@@ -12,7 +12,7 @@ module GitOrgFileScanner
 
     def contain_file(file)
       repos_with_file = []
-org_repositories.each do |repo|
+      org_repositories.each do |repo|
         contains_file?(repo[:full_name], file) ? repos_with_file << repo : next 
         begin
           @octokit_client.contents(repo[:full_name], path: file)
