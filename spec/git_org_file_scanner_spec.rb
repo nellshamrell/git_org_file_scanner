@@ -43,10 +43,46 @@ RSpec.describe GitOrgFileScanner do
       allow(github_client).to receive(:org_repositories).and_return(org_repos_response)
     end
 
-    it 'checks each repo for the file' do
-      expect(github_client).to receive(:contents).with('habitat-sh/habitat', path: file).ordered
-      expect(github_client).to receive(:contents).with('habitat-sh/national-parks', path: file).ordered
-      scanner.check_for_file(file)
+    context 'returning list of repos that DO contain the file' do
+      before do
+        allow(github_client).to receive(:contents).with('habitat-sh/habitat', path: file).and_return('yes')
+        allow(github_client).to receive(:contents).with('habitat-sh/national-parks', path: file).and_raise('error')
+      end
+
+      it 'checks each repo for the file' do
+        expect(github_client).to receive(:contents).with('habitat-sh/habitat', path: file).ordered
+        expect(github_client).to receive(:contents).with('habitat-sh/national-parks', path: file).ordered
+        scanner.contain_file(file)
+      end
+
+      it 'includes repos that contain the file' do
+        expect(scanner.contain_file(file)).to include('habitat-sh/habitat')
+      end
+
+      it 'excludes repos that do not contain the file' do
+        expect(scanner.contain_file(file)).not_to include('habitat-sh/national-parks')
+      end
+    end
+
+    context 'return a list of repos that DO NOT contain the file' do
+      before do
+        allow(github_client).to receive(:contents).with('habitat-sh/habitat', path: file).and_return('yes')
+        allow(github_client).to receive(:contents).with('habitat-sh/national-parks', path: file).and_raise('error')
+      end
+
+      it 'checks each repo for the file' do
+        expect(github_client).to receive(:contents).with('habitat-sh/habitat', path: file).ordered
+        expect(github_client).to receive(:contents).with('habitat-sh/national-parks', path: file).ordered
+        scanner.contain_file(file)
+      end
+
+      it 'includes repos that DO NOT contain the file' do
+        expect(scanner.missing_file(file)).to include('habitat-sh/national-parks')
+      end
+
+      it 'excludes repos that do contain the file' do
+        expect(scanner.missing_file(file)).not_to include('habitat-sh/habitat')
+      end
     end
   end
 end

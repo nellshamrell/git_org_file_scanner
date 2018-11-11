@@ -10,10 +10,35 @@ module GitOrgFileScanner
       @org = org
     end
 
-    def check_for_file(file)
+    def contain_file(file)
+      repos_with_file = []
+
       org_repositories.each do |repo|
-        @octokit_client.contents(repo[:full_name], path: file)
+        begin
+          @octokit_client.contents(repo[:full_name], path: file)
+          repos_with_file << repo[:full_name]
+        rescue
+          next
+        end
       end
+
+      repos_with_file
+    end
+
+    def missing_file(file)
+      repos_without_file = []
+
+      org_repositories.each do |repo|
+        begin
+          @octokit_client.contents(repo[:full_name], path: file)
+          next
+        rescue
+          repos_without_file << repo[:full_name]
+        end
+      end
+
+      repos_without_file
+ 
     end
 
     def org_repositories
