@@ -1,8 +1,6 @@
 # GitOrgFileScanner
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/git_org_file_scanner`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This Gem allows you to scan all GitHub repos in a GitHub organization to determine if they contain or if they are missing a specified file.
 
 ## Installation
 
@@ -22,7 +20,24 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Access the library in Ruby
+
+```ruby
+require 'git_org_file_scanner'
+```
+
+Let's say we want a list of all repos in the [habitat-sh GitHub Org](https://github.com/habitat-sh) that DO contain a CONTRIBUTING.md file. We would request that list like this:
+
+```ruby
+scanner = GitOrgFileScanner::Scanner.new('habitat-sh')
+scanner.contain_file('CONTRIBUTING.md')
+```
+
+Now what if we want a list of all repos that do NOT contain a CONTRIBUTING.md file?
+
+```ruby
+scanner.missing_file('CONTRIBUTING.md')
+```
 
 ## Development
 
@@ -32,7 +47,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/git_org_file_scanner. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/nellshamrell/git_org_file_scanner. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
