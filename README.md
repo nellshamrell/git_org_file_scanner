@@ -26,17 +26,25 @@ Access the library in Ruby
 require 'git_org_file_scanner'
 ```
 
+You will need a [GitHub Personal Access Token](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/) to authenticate to the GithHub API.
+
+We can initialize the scannerlike this:
+```ruby
+scanner = GitOrgFileScanner::Scanner.new('<your GitHub access token>', 'habitat-sh')
+```
+
 Let's say we want a list of all repos in the [habitat-sh GitHub Org](https://github.com/habitat-sh) that DO contain a CONTRIBUTING.md file. We would request that list like this:
 
 ```ruby
-scanner = GitOrgFileScanner::Scanner.new('habitat-sh')
 scanner.contain_file('CONTRIBUTING.md')
+=> ["habitat-sh/habitat", "habitat-sh/core-plans", "habitat-sh/habitat-launch", "habitat-sh/urlencoded", "habitat-sh/habitat-operator"] 
 ```
 
 Now what if we want a list of all repos that do NOT contain a CONTRIBUTING.md file?
 
 ```ruby
 scanner.missing_file('CONTRIBUTING.md')
+=> ["habitat-sh/habitat-example-plans", "habitat-sh/net-habitat", "habitat-sh/habitat-aspnet-sample", "habitat-sh/habitat-windows-package", "habitat-sh/language-habitat", "habitat-sh/rust-zmq", "habitat-sh/redis-postgres-migrator", "habitat-sh/habitat-aspnet-full", "habitat-sh/ipc-channel", "habitat-sh/prost", "habitat-sh/frank_jwt", "habitat-sh/sample-node-app", "habitat-sh/expresso", "habitat-sh/homebrew-habitat", "habitat-sh/sample-rails-app", "habitat-sh/windows-service", "habitat-sh/kubernetes-the-hab-way", "habitat-sh/guide-node", "habitat-sh/guide-ruby", "habitat-sh/testapp", "habitat-sh/windows-service-sample", "habitat-sh/national-parks"]
 ```
 
 ## Development
