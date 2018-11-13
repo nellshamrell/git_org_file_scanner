@@ -3,10 +3,10 @@ RSpec.describe GitOrgFileScanner do
     expect(GitOrgFileScanner::VERSION).not_to be nil
   end
 
-  context 'connecting to github' do
-    let(:org) { 'my-org' }
-    let(:github_client) { Octokit::Client.new }
+  let(:github_client) { Octokit::Client.new }
+  let(:org) { 'my-org' }
 
+  context 'connecting to github' do
     it 'initialize a connection to the GitHub API' do
       expect(Octokit::Client).to receive(:new).and_return(github_client)
 
@@ -15,7 +15,6 @@ RSpec.describe GitOrgFileScanner do
   end
 
   context 'scanning org repos for a file' do
-    let(:org) { 'my-org' }
     let(:org_repos_response) do
       [
         { id: '36098429', name: 'habitat',
@@ -25,7 +24,6 @@ RSpec.describe GitOrgFileScanner do
       ]
     end
     let(:scanner) { GitOrgFileScanner::Scanner.new(org) }
-    let(:github_client) { Octokit::Client.new }
     let(:file) { 'CONTRIBUTING.md' }
 
     before do
