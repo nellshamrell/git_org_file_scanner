@@ -6,8 +6,8 @@ module GitOrgFileScanner
   class Scanner
     attr_accessor :org
 
-    def initialize(org)
-      @octokit_client = Octokit::Client.new
+    def initialize(access_token, org)
+      @octokit_client = Octokit::Client.new(access_token: access_token)
       @org = org
       @org_repositories = org_repositories
     end

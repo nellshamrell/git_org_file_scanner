@@ -3,6 +3,7 @@ RSpec.describe GitOrgFileScanner do
     expect(GitOrgFileScanner::VERSION).not_to be nil
   end
 
+  let(:my_access_token) { "my_access_token" }
   let(:github_client) { Octokit::Client.new }
   let(:org) { 'my-org' }
 
@@ -10,7 +11,7 @@ RSpec.describe GitOrgFileScanner do
     it 'initialize a connection to the GitHub API' do
       expect(Octokit::Client).to receive(:new).and_return(github_client)
 
-      GitOrgFileScanner::Scanner.new(org)
+      GitOrgFileScanner::Scanner.new(my_access_token, org)
     end
   end
 
@@ -23,7 +24,7 @@ RSpec.describe GitOrgFileScanner do
           full_name: 'habitat-sh/national-parks' }
       ]
     end
-    let(:scanner) { GitOrgFileScanner::Scanner.new(org) }
+    let(:scanner) { GitOrgFileScanner::Scanner.new(my_access_token, org) }
     let(:file) { 'CONTRIBUTING.md' }
 
     before do
