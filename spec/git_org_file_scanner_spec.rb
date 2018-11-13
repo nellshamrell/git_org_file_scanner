@@ -5,9 +5,10 @@ RSpec.describe GitOrgFileScanner do
 
   context 'connecting to github' do
     let(:org) { 'my-org' }
+    let(:github_client) { Octokit::Client.new }
 
     it 'initialize a connection to the GitHub API' do
-      expect(Octokit::Client).to receive(:new)
+      expect(Octokit::Client).to receive(:new).and_return(github_client)
 
       GitOrgFileScanner::Scanner.new(org)
     end

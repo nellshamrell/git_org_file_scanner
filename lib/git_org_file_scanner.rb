@@ -9,12 +9,13 @@ module GitOrgFileScanner
     def initialize(org)
       @octokit_client = Octokit::Client.new
       @org = org
+      @org_repositories = org_repositories
     end
 
     def contain_file(file)
       repos = []
 
-      org_repositories.each do |repo|
+      @org_repositories.each do |repo|
         repos << repo[:full_name] if contains_file?(repo[:full_name], file)
         next
       end
@@ -25,7 +26,7 @@ module GitOrgFileScanner
     def missing_file(file)
       repos = []
 
-      org_repositories.each do |repo|
+      @org_repositories.each do |repo|
         next if contains_file?(repo[:full_name], file)
 
         repos << repo[:full_name]
