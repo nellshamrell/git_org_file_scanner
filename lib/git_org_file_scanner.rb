@@ -7,9 +7,20 @@ module GitOrgFileScanner
     attr_accessor :org
 
     def initialize(access_token, org)
-      @octokit_client = Octokit::Client.new(access_token: access_token)
+      @octokit_client = setup_client(access_token)
       @org = org
       @org_repositories = org_repositories
+    end
+
+    # setup an oktokit client with auto_pagination turned on so we get all the repos
+    # returned even in large organizations
+    #
+    # @param token [String] the github access token
+    # @return [Octokit::Client] the oktokit client object
+    def setup_client(token)
+      client = Octokit::Client.new(access_token: token)
+      client.auto_paginate = true
+      client
     end
 
     def contain_file(file)
