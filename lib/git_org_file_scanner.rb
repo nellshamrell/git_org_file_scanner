@@ -6,9 +6,10 @@ module GitOrgFileScanner
   class Scanner
     attr_accessor :org
 
-    def initialize(access_token, org)
+    def initialize(access_token, org, type = 'sources')
       @octokit_client = setup_client(access_token)
       @org = org
+      @type = type
       @org_repositories = org_repositories
     end
 
@@ -49,7 +50,7 @@ module GitOrgFileScanner
     private
 
     def org_repositories
-      @octokit_client.org_repositories(org)
+      @octokit_client.org_repositories(@org, {:type => @type})
     end
 
     def contains_file?(repo_name, file)
