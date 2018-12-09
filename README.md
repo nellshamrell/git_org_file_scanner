@@ -33,11 +33,16 @@ We can initialize the scannerlike this:
 scanner = GitOrgFileScanner::Scanner.new('<your GitHub access token>', 'habitat-sh')
 ```
 
+To limit the repositories to search to those that match a specific Github repo type you can pass in a valid repo type ('all', 'public', 'member', 'sources', 'forks', 'private'). If no type is specified then 'sources' will be used.
+```ruby
+scanner = GitOrgFileScanner::Scanner.new('<your GitHub access token>', 'habitat-sh', 'public')
+```
+
 Let's say we want a list of all repos in the [habitat-sh GitHub Org](https://github.com/habitat-sh) that DO contain a CONTRIBUTING.md file. We would request that list like this:
 
 ```ruby
 scanner.contain_file('CONTRIBUTING.md')
-=> ["habitat-sh/habitat", "habitat-sh/core-plans", "habitat-sh/habitat-launch", "habitat-sh/urlencoded", "habitat-sh/habitat-operator"] 
+=> ["habitat-sh/habitat", "habitat-sh/core-plans", "habitat-sh/habitat-launch", "habitat-sh/urlencoded", "habitat-sh/habitat-operator"]
 ```
 
 Now what if we want a list of all repos that do NOT contain a CONTRIBUTING.md file?
